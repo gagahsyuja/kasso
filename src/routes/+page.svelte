@@ -8,7 +8,12 @@
 
     let name = $state("");
     let greetMsg = $state("");
-    let object = $state({ showAddTransactionModal: false });
+    let object = $state({
+        showAddTransactionModal: false,
+        last: { amount: 0, description: 0 },
+        totalIn: 0,
+        totalOut: 0
+    });
 
     async function greet(event: Event) {
         event.preventDefault();
@@ -20,9 +25,19 @@
 
         const db = await Database.load("sqlite:database.db");
 
-        let last: Array<Object> = await db.select("SELECT * FROM transactions ORDER BY id DESC LIMIT 1");
+        let last: Array<any> = await db.select("SELECT * FROM transactions ORDER BY id DESC LIMIT 1");
+        let totalIn: Array<any> = await db.select("SELECT amount FROM transactions WHERE type = ?", ['in']);
+        let totalOut: Array<any> = await db.select("SELECT amount FROM transactions WHERE type = ?", ['out']);
 
-        return last ? last[0] : {};
+        object.totalIn = totalIn.reduce((total, num) => {
+            return total + num.amount;
+        }, 0) as number;
+
+        object.totalOut = totalOut.reduce((total, num) => {
+            return total + num.amount;
+        }, 0) as number;
+
+        object.last = last ? last[0] : {};
     }
 
     onMount(async () => {
@@ -34,7 +49,7 @@
 </script>
 
 <main class="m-0 p-4">
-    {#await load() then last: any}
+    {#await load() then}
         <div class="p-4">
             <h1 class="text-black-500 text-4xl font-semibold">
                 Today
@@ -46,7 +61,7 @@
                     In
                 </h1>
                 <h1>
-                    Rp96.000,00
+                    {object.totalIn}
                 </h1>
             </div>
             <div class="flex flex-col items-center py-12">
@@ -54,14 +69,14 @@
                     Out
                 </h1>
                 <h1>
-                    Rp69.000,00
+                    {object.totalOut}
                 </h1>
             </div>
         </div>
         <div>
             <h1>Last Transaction</h1>
-            {last.amount}
-            {last.description}
+            {object.last.amount}
+            {object.last.description}
         </div>
         <AddTransactionButton { object } />
         {#if object.showAddTransactionModal}
