@@ -5,12 +5,13 @@
     import AddTransactionButton from "./lib/AddTransactionButton.svelte";
     import Database from "@tauri-apps/plugin-sql";
     import Navigation from "./lib/Navigation/Navigation.svelte";
+    import ListTransaction from "./lib/ListTransaction.svelte";
 
     let name = $state("");
     let greetMsg = $state("");
     let object = $state({
         showAddTransactionModal: false,
-        last: { amount: 0, description: 0 },
+        last: { category_id: 0, amount: 0, date: 0, type: '', description: '' },
         totalIn: 0,
         totalOut: 0
     });
@@ -73,11 +74,14 @@
                 </h1>
             </div>
         </div>
-        <div>
-            <h1>Last Transaction</h1>
-            {object.last.amount}
-            {object.last.description}
-        </div>
+        <h1 class="text-black text-3xl p-4">Last Transaction</h1>
+        <ListTransaction
+            amount={object.last.amount}
+            type={object.last.type}
+            date={object.last.date}
+            description={object.last.description}
+            categoryId={object.last.category_id}
+        />
         <AddTransactionButton { object } />
         {#if object.showAddTransactionModal}
             <AddTransactionModal { object } />
