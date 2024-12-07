@@ -16,6 +16,11 @@
         totalOut: 0
     });
 
+    $effect(() => {
+        object.showAddTransactionModal;
+        load();
+    })
+
     async function greet(event: Event) {
         event.preventDefault();
         // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
