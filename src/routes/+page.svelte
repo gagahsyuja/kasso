@@ -6,6 +6,8 @@
     import Database from "@tauri-apps/plugin-sql";
     import Navigation from "./lib/Navigation/Navigation.svelte";
     import ListTransaction from "./lib/ListTransaction.svelte";
+    import Title from "./lib/Title.svelte";
+    import Main from "./lib/Main.svelte";
 
     let name = $state("");
     let greetMsg = $state("");
@@ -54,13 +56,9 @@
     });
 </script>
 
-<main class="m-0 p-4">
+<Main>
     {#await load() then}
-        <div class="p-4">
-            <h1 class="text-black-500 text-4xl font-semibold">
-                Today
-            </h1>
-        </div>
+        <Title title="Today" />
         <div class="flex flex-col items-center text-3xl font-semibold bg-gray-300 rounded-2xl">
             <div class="flex flex-col items-center py-12">
                 <h1 class="text-green-500 text-6xl py-4">
@@ -93,7 +91,7 @@
         {/if}
         <Navigation />
     {/await}
-</main>
+</Main>
 
 <style>
 </style>
