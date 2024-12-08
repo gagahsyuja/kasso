@@ -89,8 +89,8 @@
         {#if object.showAddTransactionModal}
             <AddTransactionModal { object } />
         {/if}
-        <Navigation />
     {/await}
+    <Navigation />
 </Main>
 
 <style>
