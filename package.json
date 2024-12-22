@@ -16,8 +16,13 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.1",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-shell": "^2",
+    "@types/accounting": "^0.4.5",
+    "accounting": "^0.4.1",
     "chart.js": "^4.4.7",
     "date-fns": "^4.1.0",
+    "date-picker-svelte": "^2.15.1",
+    "flowbite": "^2.5.2",
+    "flowbite-svelte": "^0.47.4",
     "svelte-fa": "^4.0.3"
   },
   "devDependencies": {
