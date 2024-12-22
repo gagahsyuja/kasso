@@ -8,32 +8,33 @@
     import ListTransaction from "./lib/ListTransaction.svelte";
     import Title from "./lib/Title.svelte";
     import Main from "./lib/Main.svelte";
+    import Fa from "svelte-fa";
+    import Currency from "./lib/Currency.svelte";
+    import Date from "./lib/Date.svelte";
+    import { faArrowTrendUp, faArrowTrendDown, faBell } from "@fortawesome/free-solid-svg-icons";
+    import { fly } from "svelte/transition";
 
     let name = $state("");
     let greetMsg = $state("");
+    let showCalendar = $state(false);
+    let showModal = $state(false);
     let object = $state({
-        showAddTransactionModal: false,
-        last: { category_id: 0, amount: 0, date: 0, type: '', description: '' },
+        last: [{}],
         totalIn: 0,
         totalOut: 0
     });
 
     $effect(() => {
-        object.showAddTransactionModal;
+        // object.showAddTransactionModal;
+        showModal;
         load();
     })
-
-    async function greet(event: Event) {
-        event.preventDefault();
-        // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-        greetMsg = await invoke("greet", { name });
-    }
 
     const load = async () => {
 
         const db = await Database.load("sqlite:database.db");
 
-        let last: Array<any> = await db.select("SELECT * FROM transactions ORDER BY id DESC LIMIT 1");
+        let last: Array<any> = await db.select("SELECT * FROM transactions ORDER BY date DESC LIMIT 3");
         let totalIn: Array<any> = await db.select("SELECT amount FROM transactions WHERE type = ?", ['in']);
         let totalOut: Array<any> = await db.select("SELECT amount FROM transactions WHERE type = ?", ['out']);
 
@@ -45,53 +46,103 @@
             return total + num.amount;
         }, 0) as number;
 
-        object.last = last ? last[0] : {};
+        object.last = last ? last : [{}];
     }
 
     onMount(async () => {
         const db = await Database.load("sqlite:database.db");
-        // await db.execute("INSERT INTO users (role, fullname, username, password) VALUES (?, ?, ?, ?)", ["bendahara", "Gagah Syuja", "gagahsyuja", "whatever"]);
-        db.select("SELECT * FROM transactions").then(response => console.log(response));
+        // db.select("SELECT * FROM transactions").then(response => console.log(response));
+        // db.select("SELECT * FROM transactions WHERE date BETWEEN 1733653284237 AND 1733826084237").then(response => console.log(response));
         // db.execute("DELETE FROM users WHERE id = 2").then(response => console.log(response));
     });
 </script>
 
 <Main>
     {#await load() then}
-        <Title title="Today" />
-        <div class="flex flex-col items-center text-3xl font-semibold bg-gray-300 rounded-2xl">
-            <div class="flex flex-col items-center py-12">
-                <h1 class="text-green-500 text-6xl py-4">
-                    In
-                </h1>
-                <h1>
-                    {object.totalIn}
-                </h1>
-            </div>
-            <div class="flex flex-col items-center py-12">
-                <h1 class="text-red-500 text-6xl py-4">
-                    Out
-                </h1>
-                <h1>
-                    {object.totalOut}
-                </h1>
+        <div class="flex flex-row justify-between items-center">
+            <Title title="Hello, Dhea!" />
+            <a href="/notification" in:fly={{ x: 50, y: -50 }}>
+                <Fa icon={faBell} size="1.35x" class="px-4" />
+            </a>
+        </div>
+        {#if showCalendar}
+            <Date />
+        {/if}
+        <div class="flex flex-col justify-center bg-blue-900 rounded-2xl shadow-xl shadow-blue-100" in:fly|global={{ y: 50, x: -50 }}>
+            <div class="flex flex-col justify-center items-center">
+                <div class="flex flex-col justify-center items-center py-10 px-4">
+                    <h1 class="text-md font-bold text-gray-300">
+                        Total Balance
+                    </h1>
+                    <h1 class="text-2xl text-white font-bold">
+                        <Currency amount={object.totalIn - object.totalOut} bold={true} />
+                    </h1>
+                </div>
+                <hr class="w-4/5 " />
+                <div class="flex flex-row justify-center items-center py-10">
+                    <div class="flex flex-col justify-center items-center px-4">
+                        <div class="flex flex-row justify-center items-center">
+                            <div class="p-4 bg-white rounded-xl w-12 h-12 flex justify-center items-center">
+                                <Fa icon={faArrowTrendUp} size="1.2x" />
+                            </div>
+                            <div class="flex flex-col justify-center items-start ml-2">
+                                <h1 class="text-sm font-normal text-gray-300">
+                                    Income
+                                </h1>
+                                <h1 class="text-md text-white">
+                                    <Currency amount={object.totalIn} bold={true} subUnit={false} />
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col justify-center items-center px-4">
+                        <div class="flex flex-row justify-center items-center self-start">
+                            <div class="p-4 bg-white rounded-xl w-12 h-12 flex justify-center items-center">
+                                <Fa icon={faArrowTrendDown} size="1.2x" />
+                            </div>
+                            <div class="flex flex-col items-start ml-2">
+                                <h1 class="text-sm font-normal text-gray-300">
+                                    Expense
+                                </h1>
+                                <h1 class="text-md text-white">
+                                    <Currency amount={object.totalOut} bold={true} subUnit={false} />
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <h1 class="text-black text-3xl p-4">Last Transaction</h1>
-        <ListTransaction
-            amount={object.last.amount}
-            type={object.last.type}
-            date={object.last.date}
-            description={object.last.description}
-            categoryId={object.last.category_id}
-        />
-        <AddTransactionButton { object } />
-        {#if object.showAddTransactionModal}
-            <AddTransactionModal { object } />
-        {/if}
+        <!-- <div class="flex flex-row justify-center items-center h-28 my-2"> -->
+        <!--     <a -->
+        <!--         href="/login" -->
+        <!--         class="bg-white grow min-h-24 rounded-3xl flex justify-center items-center shadow-xl shadow-blue-100"> -->
+        <!--         <h1 class="text-3xl font-bold">Monthly Report</h1> -->
+        <!--     </a> -->
+        <!--     <a href="/dates" class="bg-gray-300 p-4 min-h-24 min-w-24 rounded-3xl ml-4 flex justify-center items-center"> -->
+        <!--         <Fa icon={faPlus} size="2x" /> -->
+        <!--     </a> -->
+        <!-- </div> -->
+        <div>
+            <div class="flex flex-row justify-between items-center" in:fly|global={{ y: 50, delay: 0 }}>
+                <h1 class="text-black text-2xl p-4 font-bold">Overview</h1>
+                <a href="/history" class="text-blue-900 text-md p-4 font-bold">See More</a>
+            </div>
+            <div class="flex flex-col space-y-4" in:fly|global={{ y: 50, delay: 0 }}>
+                {#each object.last as obj}
+                    <ListTransaction
+                        amount={obj.amount}
+                        type={obj.type}
+                        date={obj.date}
+                        description={obj.description}
+                        categoryId={obj.category_id}
+                    />
+                {/each}
+            </div>
+        </div>
     {/await}
-    <Navigation />
 </Main>
+<Navigation />
 
 <style>
 </style>

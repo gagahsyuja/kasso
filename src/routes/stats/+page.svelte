@@ -4,7 +4,7 @@
     import Database from "@tauri-apps/plugin-sql";
     import { Chart } from "chart.js/auto";
     import { onMount } from "svelte";
-    import { fly } from "svelte/transition";
+    import { fly, fade } from "svelte/transition";
     import Currency from "../lib/Currency.svelte";
     import Calendar from "../lib/Calendar.svelte";
 
@@ -26,6 +26,15 @@
         endDate
     });
 
+    let backgroundColor = [
+        '#003A6B',
+        '#1B5886',
+        '#3776A1',
+        '#5293BB',
+        '#6EB1D6',
+        '#89CFF1'
+    ];
+
     const getAllTransaction = async (type: String): Promise<Array<any>> => {
 
         const db = await Database.load("sqlite:database.db");
@@ -36,11 +45,27 @@
             INNER JOIN categories ON transactions.category_id = categories.id\
             WHERE transactions.type = $1\
             AND transactions.date BETWEEN $2 AND $3\
-            GROUP BY category_id",
+            GROUP BY category_id ORDER BY amount DESC",
             [type, props.startDate, props.endDate]
         );
 
         return transactions;
+    }
+
+    const getTotalAmountByMonth = async (type: String): Promise<number> => {
+
+        const db = await Database.load("sqlite:database.db");
+
+        let amount: Array<any> = await db.select("\
+            SELECT SUM(transactions.amount) AS amount\
+            FROM transactions\
+            INNER JOIN categories ON transactions.category_id = categories.id\
+            WHERE transactions.type = $1\
+            AND transactions.date BETWEEN $2 AND $3",
+            [type, props.startDate, props.endDate]
+        );
+
+        return amount[0].amount;
     }
 
     const generateChart = async (type: String) => {
@@ -57,7 +82,8 @@
                 let datasets = [
                     {
                         labels: 'Total amount',
-                        data
+                        data,
+                        backgroundColor
                     }
                 ];
 
@@ -93,18 +119,34 @@
         getAllTransaction(selected)
             .then(transactions => {
                 
-                chart = new Chart(canvas, {
-                    type: 'pie',
-                    data: {
-                        labels: transactions.map(row => row.category),
-                        datasets: [
-                            {
-                                label: 'Total amount',
-                                data: transactions.map(row => row.amount),
-                            },
-                        ],
-                    },
-                });
+                if (transactions.length) {
+                    chart = new Chart(canvas, {
+                        type: 'pie',
+                        data: {
+                            labels: transactions.map(row => row.category),
+                            datasets: [
+                                {
+                                    label: 'Total amount',
+                                    data: transactions.map(row => row.amount),
+                                    backgroundColor
+                                }
+                            ]
+                        }
+                    });
+                } else {
+                    chart = new Chart(canvas, {
+                        type: 'pie',
+                        data: {
+                            labels: [],
+                            datasets: [
+                                {
+                                    data: [100],
+                                    backgroundColor: '#B5B5B5'
+                                }
+                            ]
+                        }
+                    });
+                }
 
                 ready = true;
             });
@@ -115,19 +157,34 @@
 <Navigation />
 
 <Main>
-    <div class="sticky top-4 bg-white">
+    <div class="sticky top-4 bg-blue-50">
         <!-- <Title title="Stats" /> -->
         <Calendar bind:props />
-        <div class="flex flex-row justify-evenly text-2xl bg-gray-200 p-4 rounded-xl w-[400px] mx-auto">
-            <button onclick={() => selected = 'in'}>
-                Income
+        <div class="flex flex-row justify-evenly text-xl bg-white p-4 rounded-xl w-5/6 mx-auto shadow-xl shadow-blue-100">
+            <button
+                onclick={() => selected = 'in'}
+                class={`${selected === 'in' ? 'text-blue-800' : 'text-black'}`}
+            >
+                <span>Income</span>
             </button>
-            <button onclick={() => selected = 'out'}>
+            <button
+                onclick={() => selected = 'out'}
+                class={`${selected === 'out' ? 'text-blue-800' : 'text-black'}`}
+            >
                 Expense
             </button>
         </div>
-        <div class="flex flex-row justify-center">
-            <section class="py-10 w-[300px] h-full">
+        <div class="flex justify-center align-middle pt-4">
+            {#key props.startDate}
+                {#await getTotalAmountByMonth(selected) then amount}
+                    <h1 class="text-2xl text-black py-2" in:fly|global={{ delay: 470 }}>
+                        <Currency amount={amount} bold={true} />
+                    </h1>
+                {/await}
+            {/key}
+        </div>
+        <div class="flex flex-row justify-center" in:fly|global={{ delay: 0 }}>
+            <section class="py-2 w-4/6 h-full">
                 <canvas bind:this={canvas}></canvas>
             </section>
         </div>
@@ -139,12 +196,12 @@
                     class="flex flex-row justify-between p-4 rounded-lg border-t-gray-300 border-b-2"
                     in:fly|global={{ y: 50, delay: 50 }}
                 >
-                    <span class="text-xl font-bold">{transaction.category}</span>
-                    <span class="text-lg">
+                    <span class="text-lg font-bold">{transaction.category}</span>
+                    <span class="text-md">
                         {#if selected === 'out'}
                             -
                         {/if}
-                        <Currency amount={transaction.amount} bold={true} />
+                        <Currency amount={transaction.amount} bold={true} subUnit={false} />
                     </span>
                 </div>
             {:else}
