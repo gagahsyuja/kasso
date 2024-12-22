@@ -65,21 +65,21 @@
     })
 </script>
 
-<div class="flex flex-row items-center justify-between text-3xl pb-8 pt-4 w-[400px] mx-auto">
+<div class="flex flex-row items-center justify-between text-2xl pb-8 pt-4 w-10/12 mx-auto">
     <button
-        class="flex flex-row items-center justify-center px-4 w-[50px] h-[50px] bg-red-500 rounded-lg text-white"
+        class="flex flex-row items-center justify-center px-4 w-[50px] h-[50px] bg-blue-900 rounded-lg text-white"
         onclick={() => decreaseMonth()}
     >
         <Fa icon={faArrowLeft} />
     </button>
     {#key currentMonth}
-        <div class="px-4 font-bold" in:fade={{ delay: 0 }}>
+        <div class="px-4 font-bold flex flex-col justify-center items-center" in:fade={{ delay: 0 }}>
             {months[currentMonth]}
             <span class="font-normal">{currentYear}</span>
         </div>
     {/key}
     <button
-        class="flex flex-row items-center justify-center px-4 w-[50px] h-[50px] bg-red-500 rounded-lg text-white"
+        class="flex flex-row items-center justify-center px-4 w-[50px] h-[50px] bg-blue-900 rounded-lg text-white"
         onclick={() => increaseMonth()}
     >
         <Fa icon={faArrowRight} />

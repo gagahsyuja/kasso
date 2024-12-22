@@ -1,8 +1,10 @@
 <script lang="ts">
-    let { amount = 69000, bold = false } = $props();
     import accounting from "accounting";
+
+    let { amount = 69000, bold = false, subUnit = true } = $props();
+    let number: HTMLElement;
 </script>
 
 <span>
-    Rp<span class="{bold ? "font-bold" : ""}">{accounting.formatMoney(amount, "", 2, ".", ",")}</span>
+    Rp<span bind:this={number} class="{bold ? "font-bold" : ""}">{accounting.formatMoney(amount, "", subUnit ? 2 : 0, ".", ",")}</span>
 </span>
