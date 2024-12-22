@@ -1,9 +1,10 @@
 <script lang="ts">
+    import { fly } from "svelte/transition";
     let { title = "The Title" } = $props();
 </script>
 
-<div class="p-4">
-    <h1 class="text-black-500 text-4xl font-semibold">
+<div in:fly|global={{ x: -50, delay: 50 }} class="p-4">
+    <h1 class="text-black-500 text-2xl font-semibold">
         {title}
     </h1>
 </div>

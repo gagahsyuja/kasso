@@ -4,8 +4,10 @@
     import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
     import Database from "@tauri-apps/plugin-sql";
     import DetailTransaction from './DetailTransaction.svelte';
+    import Currency from './Currency.svelte';
 
     let {
+        edit = false,
         amount = 69,
         type = 'in',
         date = 1733602382348,
@@ -56,13 +58,15 @@
 {/if}
 
 <button
-    onclick={() => data.showDetailTransaction = true}
-    class="flex flex-row justify-between items-center bg-gray-300
-        px-8 py-4 rounded-xl w-full text-left"
+    onclick={() => {
+        if (!edit) {data.showDetailTransaction = true}}
+    }
+    class="flex flex-row justify-between items-center bg-white shadow-xl shadow-blue-100
+        px-4 py-4 rounded-xl w-full text-left"
 >
     <div class="flex flex-row">
         <div class="flex flex-row items-center 
-            {type === 'in' ? "bg-green-500" : "bg-red-500"}
+            {type === 'in' ? "bg-blue-100" : "bg-blue-100"}
             w-[50px] h-[50px] p-4 rounded-full
         ">
             {#if type === 'in'}
@@ -72,16 +76,22 @@
             {/if}
         </div>
         <div class="flex flex-col pl-4">
-            <span class="font-bold text-xl capitalize">{category}</span>
-            <span>{formatDistanceToNow(dateObj, { addSuffix: true })}</span>
+            <span class="font-bold text-lg capitalize">{category}</span>
+            <span class="text-sm">{formatDistanceToNow(dateObj, { addSuffix: true })}</span>
         </div>
     </div>
     <span class="text-lg">
-        {#if type === 'in'}
-            +
-        {:else}
+        {#if type === 'out'}
             -
+        {:else}
+            +
         {/if}
-        Rp{amount},00
+        <Currency amount={amount} bold={true} subUnit={false} />
     </span>
 </button>
+
+<style>
+    :global(html) {
+        background-color: rgb(239 246 255);
+    }
+</style>
