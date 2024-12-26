@@ -1,8 +1,5 @@
 <script lang="ts">
-    import { invoke } from "@tauri-apps/api/core";
     import { onMount } from "svelte";
-    import AddTransactionModal from "./lib/AddTransactionModal.svelte";
-    import AddTransactionButton from "./lib/AddTransactionButton.svelte";
     import Database from "@tauri-apps/plugin-sql";
     import Navigation from "./lib/Navigation/Navigation.svelte";
     import ListTransaction from "./lib/ListTransaction.svelte";
@@ -10,13 +7,11 @@
     import Main from "./lib/Main.svelte";
     import Fa from "svelte-fa";
     import Currency from "./lib/Currency.svelte";
-    import Date from "./lib/Date.svelte";
+    import Empty from "./lib/Empty.svelte";
     import { faArrowTrendUp, faArrowTrendDown, faBell } from "@fortawesome/free-solid-svg-icons";
     import { fly } from "svelte/transition";
+    import { goto } from "$app/navigation";
 
-    let name = $state("");
-    let greetMsg = $state("");
-    let showCalendar = $state(false);
     let showModal = $state(false);
     let object = $state({
         last: [{}],
@@ -25,7 +20,6 @@
     });
 
     $effect(() => {
-        // object.showAddTransactionModal;
         showModal;
         load();
     })
@@ -50,7 +44,9 @@
     }
 
     onMount(async () => {
-        const db = await Database.load("sqlite:database.db");
+
+        if (!localStorage.getItem("username")) goto('/login', { replaceState: true });
+        // const db = await Database.load("sqlite:database.db");
         // db.select("SELECT * FROM transactions").then(response => console.log(response));
         // db.select("SELECT * FROM transactions WHERE date BETWEEN 1733653284237 AND 1733826084237").then(response => console.log(response));
         // db.execute("DELETE FROM users WHERE id = 2").then(response => console.log(response));
@@ -60,14 +56,18 @@
 <Main>
     {#await load() then}
         <div class="flex flex-row justify-between items-center">
-            <Title title="Hello, Dhea!" />
+            <div class="flex flex-row justify-start items-center">
+                <Title title="Hello, {localStorage.getItem('username')}!" />
+                <div class="rounded-lg px-2 font-bold border-2 bg-blue-200 border-blue-900 text-xs text-blue-900"
+                    in:fly|global={{ y: -50 }}
+                >
+                    {localStorage.getItem('role') === 'member' ? "Member" : "Treasurer"}
+                </div>
+            </div>
             <a href="/notification" in:fly={{ x: 50, y: -50 }}>
                 <Fa icon={faBell} size="1.35x" class="px-4" />
             </a>
         </div>
-        {#if showCalendar}
-            <Date />
-        {/if}
         <div class="flex flex-col justify-center bg-blue-900 rounded-2xl shadow-xl shadow-blue-100" in:fly|global={{ y: 50, x: -50 }}>
             <div class="flex flex-col justify-center items-center">
                 <div class="flex flex-col justify-center items-center py-10 px-4">
@@ -137,6 +137,8 @@
                         description={obj.description}
                         categoryId={obj.category_id}
                     />
+                {:else}
+                    <Empty value="No recent transaction." />
                 {/each}
             </div>
         </div>
