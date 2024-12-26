@@ -9,9 +9,9 @@ pub fn get_migrations() -> Vec<Migration>
             sql: "CREATE TABLE users (
                 id INTEGER PRIMARY KEY,
                 role TEXT,
-                fullname TEXT,
                 username TEXT,
-                password TEXT
+                password TEXT,
+                notify INTEGER
             );",
             kind: MigrationKind::Up
         },
@@ -35,6 +35,7 @@ pub fn get_migrations() -> Vec<Migration>
                 description TEXT,
                 type TEXT,
                 amount INTEGER,
+                method TEXT,
                 date NUMERIC,
                 FOREIGN KEY (user_id) REFERENCES users(id),
                 FOREIGN KEY (category_id) REFERENCES categories(id)
