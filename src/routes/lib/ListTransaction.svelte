@@ -35,7 +35,7 @@
             ).then((categories: any) => {
                 category = categories.length !== 0
                     ? categories[0].name
-                    : 'Transaction type';
+                    : 'Other';
             });
         });
 
