@@ -1,21 +1,26 @@
 <script lang="ts">
     import Title from "./Title.svelte";
-    import scrollbarHide from 'tailwind-scrollbar-hide';
     import HugeButton from "./HugeButton.svelte";
     import FilterItem from "./FilterItem.svelte";
+    import Empty from "./Empty.svelte";
     import { DateInput } from "date-picker-svelte";
     import { fly, scale } from "svelte/transition";
-    import { onMount } from "svelte";
 
     let { visible = $bindable(), filter = $bindable(), categories } = $props();
 
-    let filteredCategories = $state(categories.map((item: any) => item.name));
+    let filteredCategories: any = $state(
+        categories
+        ? categories.map((item: any) => item.name)
+        : null
+    );
 
     const getCategories = () => {
         
+        // if (filteredCategories) {
         filteredCategories = filter.type === "All"
-            ? categories.map((item: any) => item.name)
-            : categories.filter((item: any) => item.type === filter.type).map((item: any) => item.name);
+        ? categories.map((item: any) => item.name)
+        : categories.filter((item: any) => item.type === filter.type).map((item: any) => item.name)
+        // }
 
     }
 
@@ -44,7 +49,7 @@
 <div class="w-full h-full bg-blue-900/95 top-0 left-0 fixed z-[999]" in:fly={{ y: 50, duration: 0 }}>
     <div class="fixed z-[999] inset-0 top-20 mx-auto
         p-5 border w-[90%] h-2/3 rounded-xl bg-white flex
-        flex-col space-y-2 justify-center"
+        flex-col space-y-2 justify-between"
         in:fly|global={{ y: 50, duration: 100 }} out:fly|global={{ y: -50, duration: 100 }}
     >
         <div class="flex flex-row justify-between items-center scrollbar-hide pt-2">
@@ -68,7 +73,7 @@
                 />
             </div>
         </div>
-        <div class="flex flex-col justify-start items-start space-x-2 overflow-scroll">
+        <div class="flex flex-col justify-start items-start space-x-2 overflow-scroll pb-2">
             <h1 class="font-bold p-2">Transaction Method</h1>
             <div class="flex flex-row items-center space-x-2">
                 <FilterItem value={"All"}
@@ -85,19 +90,23 @@
                 />
             </div>
         </div>
-        <div class="flex flex-col justify-start items-start space-x-2 overflow-scroll">
-            <h1 class="font-bold p-2">Transaction Category</h1>
+        <h1 class="font-bold px-2">Transaction Category</h1>
+        <div class="flex flex-col justify-start items-start space-x-2 overflow-scroll px-2">
             <div class="flex flex-row items-center space-x-2">
-                <FilterItem value={"All"}
-                    selected={filter.category === "All"}
-                    onclick={() => filter.category = "All"}
-                />
-                {#each filteredCategories as category}
-                    <FilterItem value={category}
-                        selected={filter.category === category}
-                        onclick={() => filter.category = category}
+                {#if filteredCategories}
+                    <FilterItem value={"All"}
+                        selected={filter.category === "All"}
+                        onclick={() => filter.category = "All"}
                     />
-                {/each}
+                    {#each filteredCategories as category}
+                        <FilterItem value={category}
+                            selected={filter.category === category}
+                            onclick={() => filter.category = category}
+                        />
+                    {/each}
+                {:else}
+                    <Empty value="No category available." />
+                {/if}
             </div>
         </div>
         <div class="flex flex-row justify-center items-center space-x-2">
