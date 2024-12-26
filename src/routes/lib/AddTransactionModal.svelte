@@ -1,6 +1,7 @@
 <script lang="ts">
     import Database from "@tauri-apps/plugin-sql";
     import AddItem from "./AddItem.svelte";
+    import Empty from "./Empty.svelte";
     import { DateInput } from "date-picker-svelte";
     import { onMount } from "svelte";
     import { scale, fly } from "svelte/transition";
@@ -13,7 +14,7 @@
     let payload = $state({
         type: 'in',
         amount: 0,
-        category: 0,
+        category: null,
         method: 'cash',
         description: '',
         date: new Date()
@@ -34,15 +35,16 @@
 
         await db.execute(
             "INSERT INTO transactions\
-            (user_id, category_id, description, type, amount, date)\
-            VALUES ($1, $2, $3, $4, $5, $6);",
+            (user_id, category_id, description, type, amount, method, date)\
+            VALUES ($1, $2, $3, $4, $5, $6, $7);",
             [
                 1,
                 payload.category,
                 payload.description,
                 payload.type,
                 payload.amount,
-                Date.parse(payload.date)
+                payload.method,
+                Date.parse(payload.date.toString())
             ]
         );
 
@@ -69,8 +71,8 @@
 {#await load() then}
 <div class="w-full h-full bg-blue-900/95 top-0 left-0 fixed z-[999]" in:scale={{ duration: 50 }}>
     <div class="fixed z-[999] inset-0 top-20 mx-auto
-        p-5 border w-[90%] h-2/3 rounded-xl bg-white flex
-        flex-col space-y-2 justify-center"
+        p-5 border w-[90%] h-4/5 rounded-xl bg-white flex
+        flex-col space-y-2 justify-between"
         in:fly|global={{ y: 50, duration: 100 }} out:fly|global={{ y: -50, duration: 100 }}
     >
         <div class="flex flex-row justify-between items-center scrollbar-hide pt-2">
@@ -124,6 +126,9 @@
         <div class="flex flex-col justify-center items-start space-x-2 overflow-scroll">
             <span class="text-lg font-bold p-2">Category</span>
             <div class="flex flex-row items-center space-x-2">
+                <AddItem value={"Other"} selected={payload.category === null}
+                    onclick={() => payload.category = null}
+                />
                 {#each filteredCategories as category}
                     <AddItem value={category.name} selected={payload.category === category.id}
                         onclick={() => payload.category = category.id}
