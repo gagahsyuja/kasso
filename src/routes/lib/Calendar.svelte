@@ -3,6 +3,7 @@
     import { fade } from "svelte/transition";
     import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
     import { onMount } from "svelte";
+    import { fly } from "svelte/transition";
 
     let { props = $bindable() } = $props();
 
@@ -65,22 +66,24 @@
     })
 </script>
 
-<div class="flex flex-row items-center justify-between text-2xl pb-8 pt-4 w-10/12 mx-auto">
+<div class="flex flex-row items-center justify-between text-2xl pb-4 pt-2 w-10/12 mx-auto">
     <button
-        class="flex flex-row items-center justify-center px-4 w-[50px] h-[50px] bg-blue-900 rounded-lg text-white"
+        class="flex flex-row items-center justify-center px-4 w-[45px] h-[45px] bg-blue-900 rounded-lg text-white"
         onclick={() => decreaseMonth()}
+        in:fly={{ x: -50, y: -50 }}
     >
         <Fa icon={faArrowLeft} />
     </button>
     {#key currentMonth}
-        <div class="px-4 font-bold flex flex-col justify-center items-center" in:fade={{ delay: 0 }}>
+        <div class="px-4 font-bold flex flex-col justify-center items-center text-md" in:fly={{ y: -50 }}>
             {months[currentMonth]}
             <span class="font-normal">{currentYear}</span>
         </div>
     {/key}
     <button
-        class="flex flex-row items-center justify-center px-4 w-[50px] h-[50px] bg-blue-900 rounded-lg text-white"
+        class="flex flex-row items-center justify-center px-4 w-[45px] h-[45px] bg-blue-900 rounded-lg text-white"
         onclick={() => increaseMonth()}
+        in:fly={{ x: 50, y: -50 }}
     >
         <Fa icon={faArrowRight} />
     </button>
