@@ -4,6 +4,7 @@
     import Title from "../lib/Title.svelte";
     import NotificationItem from "../lib/NotificationItem.svelte";
     import Database from "@tauri-apps/plugin-sql";
+    import Empty from "../lib/Empty.svelte";
     import { onMount } from "svelte";
 
     const getNotification = async (): Promise<Array<any>> => {
@@ -52,6 +53,8 @@
                     date={transaction.date}
                     description={transaction.description}
                 />
+            {:else}
+                <Empty value="No notifications yet!" />
             {/each}
         {/await}
     </div>
