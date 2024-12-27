@@ -4,8 +4,10 @@
     import Fa from "svelte-fa";
     import AddTransactionModal from "../AddTransactionModal.svelte";
 
+    let { showModal = $bindable(false) } = $props();
+
     let date: any = $state(new Date(Date.now()));
-    let showModal = $state(false);
+    // let showModal = $state(false);
 
     date = `${date.getDate()}/${date.getMonth() + 1}`;
 </script>

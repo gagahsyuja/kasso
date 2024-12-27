@@ -166,7 +166,7 @@
         </div>
     {/await}
 </Main>
-<Navigation />
+<Navigation bind:showModal />
 
 <style>
     .zoom {

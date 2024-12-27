@@ -11,6 +11,7 @@
     import { onMount } from "svelte";
 
     let visible = $state(false);
+    let showModal = $state(false);
 
     let filter = $state({
         type: 'All',
@@ -62,7 +63,7 @@
 
 </script>
 
-<Navigation />
+<Navigation bind:showModal />
 
 <Main>
     <div class="flex flex-row justify-between items-center">
@@ -80,6 +81,8 @@
             <Filter bind:visible bind:filter { categories } />
         {/if}
     {/await}
+    {#key showModal}
+
     {#await loadWithFilter(filter.type, filter.method, filter.category, filter.date.from, filter.date.to) then transactions}
         {#each transactions.reverse() as transaction}
             <div class="overflow-scroll">
@@ -99,4 +102,6 @@
             </div>
         {/each}
     {/await}
+
+    {/key}
 </Main>
