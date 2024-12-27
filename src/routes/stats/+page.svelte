@@ -157,7 +157,7 @@
 <Navigation />
 
 <Main>
-    <div class="sticky top-4 bg-blue-50">
+    <div class="sticky top-2 bg-blue-50">
         <Calendar bind:props />
         <div
             class="my-2 flex flex-row justify-evenly text-xl bg-white p-2 rounded-xl w-2/3 mx-auto shadow-xl shadow-blue-100"
@@ -184,7 +184,7 @@
     </div>
     {#key props.startDate}
         {#await getTotalAmountByMonth(selected) then amount}
-            <h1 class="text-center text-lg py-2" in:fly|global={{ y: 50 }}>
+            <h1 class="text-center text-lg py-2 pt-4" in:fly|global={{ y: 50 }}>
                 <Currency amount={amount} bold={true} /> total {selected === 'in' ? 'income' : 'expense'}
             </h1>
         {/await}
