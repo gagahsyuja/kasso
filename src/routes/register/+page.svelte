@@ -1,6 +1,7 @@
 <script lang="ts">
     import Fa from "svelte-fa";
     import Database from "@tauri-apps/plugin-sql";
+    import Input from "../lib/Input.svelte";
     import { faUser, faLock, faKey } from "@fortawesome/free-solid-svg-icons";
     import { scale } from "svelte/transition";
     import { goto } from "$app/navigation";
@@ -57,7 +58,7 @@
             );
 
             message = '';
-            localStorage.setItem('userId', result.lastInsertId.toString());
+            localStorage.setItem('userId', result.lastInsertId!.toString());
             localStorage.setItem('username', username)
             localStorage.setItem('role', role)
             localStorage.setItem('notify', '500000')
@@ -66,11 +67,11 @@
     };
 </script>
 
-<div class="flex flex-col justify-center items-center pb-56">
-    <h1 class="text-6xl font-extrabold pt-10 pb-10 text-blue-900">
+<div class="fixed h-full w-full flex flex-col justify-evenly items-center">
+    <h1 class="text-6xl font-extrabold text-blue-900">
         KASSO
     </h1>
-    <div class="flex flex-col w-full justify-center items-center px-8 space-y-6">
+    <div class="flex flex-col w-full justify-center items-center px-8 space-y-3">
         {#key message}
             <div class="{message !== '' ? "opacity-100" : "opacity-0" } rounded-xl w-full text-center
                 font-bold px-6 py-2 bg-red-500 text-white"
@@ -79,39 +80,35 @@
                 {message}
             </div>
         {/key}
-        <div class="bg-white flex flex-col bg-red-500/0 px-6 my-0 w-full rounded-3xl shadow-xl shadow-blue-100">
-            <label class="pt-2 text-gray-800" for="email">Username</label>
-            <div class="flex flex-row justify-center items-center pb-2">
-                <Fa icon={faUser} size="1.2x" class="" />
-                <input class="mx-2 border-0 w-full focus:ring-0 font-bold text-black text-xl" type="text" id="username" bind:value={username} />
-            </div>
-        </div>
-        <div class="bg-white flex flex-col bg-red-500/0 px-6 my-0 w-full rounded-3xl shadow-xl shadow-blue-100">
-            <label class="pt-2 text-gray-800" for="password">Password</label>
-            <div class="flex flex-row justify-center items-center pb-2">
-                <Fa icon={faLock} size="1.2x" class="" />
-                <input class="mx-2 border-0 w-full focus:ring-0 font-bold text-black text-xl" type="password" id="password" bind:value={password} />
-            </div>
-        </div>
-        <div class="bg-white flex flex-col bg-red-500/0 px-6 my-0 w-full rounded-3xl shadow-xl shadow-blue-100">
-            <label class="pt-2 text-gray-800" for="confirmPassword">Confirm Password</label>
-            <div class="flex flex-row justify-center items-center pb-2">
-                <Fa icon={faLock} size="1.2x" class="" />
-                <input class="mx-2 border-0 w-full focus:ring-0 font-bold text-black text-xl" type="password" id="confirmPassword" bind:value={confirmPassword} />
-            </div>
-        </div>
-        <div class="bg-white flex flex-col bg-red-500/0 px-6 my-0 w-full rounded-3xl shadow-xl shadow-blue-100">
-            <label class="pt-2 text-gray-800" for="code">Secret Code (Optional)</label>
-            <div class="flex flex-row justify-center items-center pb-2">
-                <Fa icon={faKey} size="1.2x" class="" />
-                <input class="mx-2 border-0 w-full focus:ring-0 font-bold text-black text-xl" type="text" id="code" bind:value={code} />
-            </div>
+        <Input
+            icon={faUser}
+            name={"Username"}
+            type={"text"}
+            bind:value={username}
+        />
+        <Input
+            icon={faLock}
+            name={"Password"}
+            type={"password"}
+            bind:value={password}
+        />
+        <Input
+            icon={faLock}
+            name={"Confirm Password"}
+            type={"password"}
+            bind:value={confirmPassword}
+        />
+        <Input
+            icon={faKey}
+            name={"Secret Key (Optional)"}
+            type={"password"}
+            bind:value={code}
+        />
+        <div class="flex flex-col justify-center items-center w-full py-4 space-y-2">
+            <button onclick="{handleRegister}" class="bg-blue-900 text-white font-semibold p-4 w-full rounded-[30px]">Register</button>
+            <a href="/login">Login</a>
         </div>
     </div>
-    <div class="w-full px-8 py-7">
-        <button onclick="{handleRegister}" class="bg-blue-900 text-white font-semibold p-4 w-full rounded-[30px]">Register</button>
-    </div>
-    <a href="/login">Login</a>
 </div>
 
 <style>

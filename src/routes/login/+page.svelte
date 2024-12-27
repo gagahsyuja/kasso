@@ -1,6 +1,7 @@
 <script lang="ts">
     import Fa from "svelte-fa";
     import Database from "@tauri-apps/plugin-sql";
+    import Input from "../lib/Input.svelte";
     import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
@@ -37,12 +38,11 @@
     })
 </script>
 
-<div class="flex flex-col justify-center items-center pb-56">
-    <h1 class="text-6xl font-extrabold pt-32 pb-32 text-blue-900">
+<div class="fixed flex flex-col justify-evenly items-center w-full h-full">
+    <h1 class="text-6xl font-extrabold text-blue-900">
         KASSO
     </h1>
-    <div class="flex flex-col w-full justify-center items-center px-8 space-y-6">
-        <!-- {#if wrongCredential} -->
+    <div class="flex flex-col w-full justify-center items-center px-8 space-y-3">
         {#key wrongCredential}
             <div class="{wrongCredential ? "opacity-100" : "opacity-0" } rounded-xl w-full text-center
                 font-bold px-6 py-2 bg-red-500 text-white"
@@ -51,26 +51,23 @@
                 Wrong username or password!
             </div>
         {/key}
-        <!-- {/if} -->
-        <div class="bg-white flex flex-col bg-red-500/0 px-8 my-0 w-full rounded-3xl shadow-xl shadow-blue-100">
-            <label class="pt-2 text-gray-800" for="email">Username</label>
-            <div class="flex flex-row justify-center items-center pb-2">
-                <Fa icon={faUser} size="1.3x" class="" />
-                <input class="mx-2 border-0 w-full focus:ring-0 font-bold text-black text-xl" type="text" id="username" bind:value={username} />
-            </div>
-        </div>
-        <div class="bg-white flex flex-col bg-red-500/0 px-8 my-0 w-full rounded-3xl shadow-xl shadow-blue-100">
-            <label class="pt-2 text-gray-800" for="password">Password</label>
-            <div class="flex flex-row justify-center items-center pb-2">
-                <Fa icon={faLock} size="1.3x" class="" />
-                <input class="mx-2 border-0 w-full focus:ring-0 font-bold text-black text-xl" type="password" id="password" bind:value={password} />
-            </div>
+        <Input
+            icon={faUser}
+            name={"Username"}
+            type={"text"}
+            bind:value={username}
+        />
+        <Input
+            icon={faLock}
+            name={"Password"}
+            type={"password"}
+            bind:value={password}
+        />
+        <div class="flex flex-col justify-center items-center w-full py-7 space-y-2">
+            <button onclick="{checkPassword}" class="bg-blue-900 text-white font-semibold p-4 w-full rounded-[30px]">Login</button>
+            <a href="/register">Create Account</a>
         </div>
     </div>
-    <div class="w-full px-8 py-7">
-        <button onclick="{checkPassword}" class="bg-blue-900 text-white font-semibold p-4 w-full rounded-[30px]">Login</button>
-    </div>
-    <a href="/register">Create Account</a>
 </div>
 
 <style>
