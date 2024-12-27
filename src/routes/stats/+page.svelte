@@ -1,13 +1,13 @@
 <script lang="ts">
-    import Navigation from "../lib/Navigation/Navigation.svelte";
-    import Main from "../lib/Main.svelte";
+    import Navigation from "$lib/Navigation/Navigation.svelte";
+    import Main from "$lib/Main.svelte";
     import Database from "@tauri-apps/plugin-sql";
     import { Chart } from "chart.js/auto";
     import { onMount } from "svelte";
     import { fly, scale } from "svelte/transition";
     import { circIn } from "svelte/easing";
-    import Currency from "../lib/Currency.svelte";
-    import Calendar from "../lib/Calendar.svelte";
+    import Currency from "$lib/Currency.svelte";
+    import Calendar from "$lib/Calendar.svelte";
 
     let canvas: HTMLCanvasElement;
     let selected = $state('in');

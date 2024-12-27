@@ -1,11 +1,11 @@
 <script lang="ts">
-    import Navigation from "../lib/Navigation/Navigation.svelte";
-    import Main from "../lib/Main.svelte";
-    import Title from "../lib/Title.svelte";
-    import HugeButton from "../lib/HugeButton.svelte";
-    import SettingsItem from "../lib/Settings/SettingsItem.svelte";
-    import Category from "../lib/Settings/Category.svelte";
-    import Notification from "../lib/Settings/Notification.svelte";
+    import Navigation from "$lib/Navigation/Navigation.svelte";
+    import Main from "$lib/Main.svelte";
+    import Title from "$lib/Title.svelte";
+    import HugeButton from "$lib/HugeButton.svelte";
+    import SettingsItem from "$lib/Settings/SettingsItem.svelte";
+    import Category from "$lib/Settings/Category.svelte";
+    import Notification from "$lib/Settings/Notification.svelte";
 
     import { faList, faBell } from "@fortawesome/free-solid-svg-icons";
     import { goto } from "$app/navigation";

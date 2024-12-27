@@ -1,10 +1,10 @@
 <script lang="ts">
-    import Navigation from "../lib/Navigation/Navigation.svelte";
-    import Main from "../lib/Main.svelte";
-    import Title from "../lib/Title.svelte";
-    import NotificationItem from "../lib/NotificationItem.svelte";
+    import Navigation from "$lib/Navigation/Navigation.svelte";
+    import Main from "$lib/Main.svelte";
+    import Title from "$lib/Title.svelte";
+    import NotificationItem from "$lib/NotificationItem.svelte";
     import Database from "@tauri-apps/plugin-sql";
-    import Empty from "../lib/Empty.svelte";
+    import Empty from "$lib/Empty.svelte";
     import { onMount } from "svelte";
 
     const getNotification = async (): Promise<Array<any>> => {

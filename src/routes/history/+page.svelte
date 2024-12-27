@@ -1,11 +1,11 @@
 <script lang="ts">
-    import Navigation from "../lib/Navigation/Navigation.svelte";
-    import ListTransaction from "../lib/ListTransaction.svelte";
+    import Navigation from "$lib/Navigation/Navigation.svelte";
+    import ListTransaction from "$lib/ListTransaction.svelte";
     import Database from "@tauri-apps/plugin-sql";
-    import Title from "../lib/Title.svelte";
-    import Main from "../lib/Main.svelte";
-    import Filter from "../lib/Filter.svelte";
-    import Empty from "../lib/Empty.svelte";
+    import Title from "$lib/Title.svelte";
+    import Main from "$lib/Main.svelte";
+    import Filter from "$lib/Filter.svelte";
+    import Empty from "$lib/Empty.svelte";
     import { fly } from "svelte/transition";
     import { flip } from "svelte/animate";
     import { onMount } from "svelte";

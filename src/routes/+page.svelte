@@ -1,13 +1,13 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import Database from "@tauri-apps/plugin-sql";
-    import Navigation from "./lib/Navigation/Navigation.svelte";
-    import ListTransaction from "./lib/ListTransaction.svelte";
-    import Title from "./lib/Title.svelte";
-    import Main from "./lib/Main.svelte";
+    import Navigation from "$lib/Navigation/Navigation.svelte";
+    import ListTransaction from "$lib/ListTransaction.svelte";
+    import Title from "$lib/Title.svelte";
+    import Main from "$lib/Main.svelte";
     import Fa from "svelte-fa";
-    import Currency from "./lib/Currency.svelte";
-    import Empty from "./lib/Empty.svelte";
+    import Currency from "$lib/Currency.svelte";
+    import Empty from "$lib/Empty.svelte";
     import { faArrowTrendUp, faArrowTrendDown, faBell } from "@fortawesome/free-solid-svg-icons";
     import { fly } from "svelte/transition";
     import { goto } from "$app/navigation";
