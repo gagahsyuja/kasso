@@ -81,8 +81,8 @@
         {/if}
     {/await}
     {#await loadWithFilter(filter.type, filter.method, filter.category, filter.date.from, filter.date.to) then transactions}
-        <div class="overflow-scroll">
-            {#each transactions.reverse() as transaction}
+        {#each transactions.reverse() as transaction}
+            <div class="overflow-scroll">
                 <div in:fly|global={{ y: 50, delay: 0 }} class="py-2">
                     <ListTransaction
                         amount={transaction.amount}
@@ -92,11 +92,11 @@
                         categoryId={transaction.category_id}
                     />
                 </div>
-            {:else}
-                <div in:fly|global={{ y: 50, delay: 0 }} class="fixed top-0 w-full h-full flex justify-center items-center pr-4">
-                    <Empty value="No transaction has been made." />
-                </div>
-            {/each}
-        </div>
+            </div>
+        {:else}
+            <div in:fly|global={{ y: 50, delay: 0 }} class="fixed w-full h-full flex justify-center items-center pr-4">
+                <Empty value="No transaction has been made." />
+            </div>
+        {/each}
     {/await}
 </Main>
