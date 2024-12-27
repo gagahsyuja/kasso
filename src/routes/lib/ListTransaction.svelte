@@ -8,8 +8,10 @@
 
     let {
         edit = false,
+        id = 69,
         amount = 69,
         type = 'in',
+        method = 'cash',
         date = 1733602382348,
         description = 'Description goes here',
         categoryId = 0
@@ -20,8 +22,10 @@
 
     let data = $state({
         showDetailTransaction: false,
+        id,
         amount,
         type,
+        method,
         date,
         description,
         categoryId
@@ -41,8 +45,10 @@
 
         data = {
             showDetailTransaction: false,
+            id,
             amount,
             type,
+            method,
             date,
             description,
             categoryId

@@ -151,8 +151,10 @@
             <div class="flex flex-col space-y-4" in:fly|global={{ y: 50, delay: 0 }}>
                 {#each object.last as obj}
                     <ListTransaction
+                        id={obj.id}
                         amount={obj.amount}
                         type={obj.type}
+                        method={obj.method}
                         date={obj.date}
                         description={obj.description}
                         categoryId={obj.category_id}
