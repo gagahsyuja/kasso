@@ -5,7 +5,7 @@
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
     import { scale } from "svelte/transition";
-    import { sha256 } from "js-sha256";
+    import { sha256, type Message } from "js-sha256";
 
     let username = $state();
     let password = $state();
@@ -13,7 +13,7 @@
 
     const checkPassword = async () => {
 
-        let hashedPassword = sha256(password);
+        let hashedPassword = sha256(password as Message);
 
         const db = await Database.load("sqlite:database.db");
 
@@ -24,6 +24,7 @@
         if (result.length) {
             localStorage.setItem('username', result[0].username)
             localStorage.setItem('role', result[0].role)
+            localStorage.setItem('notify', result[0].notify)
             goto('/', { replaceState: true })
             wrongCredential = false;
         } else {

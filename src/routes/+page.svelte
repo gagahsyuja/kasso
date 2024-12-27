@@ -43,6 +43,22 @@
         object.last = last ? last : [{}];
     }
 
+    const checkNotification = async (): Promise<boolean> => {
+
+        let username = localStorage.getItem('username');
+
+        const db = await Database.load("sqlite:database.db");
+
+        const status: Array<any> = await db.select(
+            "SELECT new_notification FROM users WHERE username = $1",
+            [ username ]
+        );
+
+        return status.length
+            ? Boolean(status[0].new_notification)
+            : false;
+    };
+
     onMount(async () => {
 
         if (!localStorage.getItem("username")) goto('/login', { replaceState: true });
@@ -65,7 +81,11 @@
                 </div>
             </div>
             <a href="/notification" in:fly={{ x: 50, y: -50 }}>
-                <Fa icon={faBell} size="1.35x" class="px-4" />
+                {#await checkNotification() then exist}
+                    <div class="{ exist ? "zoom" : ""}">
+                        <Fa icon={faBell} size="1.35x" class="px-4" />
+                    </div>
+                {/await}
             </a>
         </div>
         <div class="flex flex-col justify-center bg-blue-900 rounded-2xl shadow-xl shadow-blue-100" in:fly|global={{ y: 50, x: -50 }}>
@@ -147,4 +167,24 @@
 <Navigation />
 
 <style>
+    .zoom {
+        animation: zoom-in-out 1s ease-in-out infinite;
+    }
+    @keyframes zoom-in-out {
+        0% {
+            scale: 100%;
+            color: black;
+        }
+        25% {
+            color: #1e3a8a;
+        }
+        50% {
+            scale: 130%;
+            color: #1e3a8a;
+        }
+        100% {
+            scale: 100%;
+            color: black;
+        }
+    }
 </style>

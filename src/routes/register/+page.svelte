@@ -51,14 +51,16 @@
 
             const db = await Database.load("sqlite:database.db");
 
-            await db.execute(
+            let result = await db.execute(
                 "INSERT INTO users (role, username, password, notify) VALUES ($1, $2, $3, $4)", 
                 [ role, username, hashedPassword, 500000 ]
             );
 
             message = '';
+            localStorage.setItem('userId', result.lastInsertId.toString());
             localStorage.setItem('username', username)
             localStorage.setItem('role', role)
+            localStorage.setItem('notify', '500000')
             goto('/', { replaceState: true });
         }
     };

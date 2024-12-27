@@ -31,14 +31,12 @@
 
         const db = await Database.load("sqlite:database.db");
 
-        console.log(payload);
-
         await db.execute(
             "INSERT INTO transactions\
             (user_id, category_id, description, type, amount, method, date)\
             VALUES ($1, $2, $3, $4, $5, $6, $7);",
             [
-                1,
+                parseInt(localStorage.getItem('userId')!),
                 payload.category,
                 payload.description,
                 payload.type,
@@ -47,6 +45,16 @@
                 Date.parse(payload.date.toString())
             ]
         );
+
+        let notify = parseInt(localStorage.getItem('notify')!);
+        let username = localStorage.getItem('username');
+
+        if (payload.amount >= notify) {
+            await db.execute(
+                "UPDATE users SET new_notification = 1 WHERE username = $1",
+                [ username ]
+            )
+        }
 
         showModal = false;
     }
