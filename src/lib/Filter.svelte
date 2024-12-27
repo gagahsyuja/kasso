@@ -48,7 +48,7 @@
 
 <div class="w-full h-full bg-blue-900/95 top-0 left-0 fixed z-[999]" in:fly={{ y: 50, duration: 0 }}>
     <div class="fixed z-[999] inset-0 top-20 mx-auto
-        p-5 border w-[90%] h-2/3 rounded-xl bg-white flex
+        p-5 border w-[90%] h-3/4 rounded-xl bg-white flex
         flex-col space-y-2 justify-between"
         in:fly|global={{ y: 50, duration: 100 }} out:fly|global={{ y: -50, duration: 100 }}
     >
@@ -56,7 +56,7 @@
             <span class="text-xl font-bold">Filter Transactions</span>
             <button class="text-md text-blue-900 font-bold" onclick={reset}>Reset</button>
         </div>
-        <div class="flex flex-col justify-start items-start space-x-2 overflow-scroll">
+        <div class="flex flex-col justify-start items-start space-x-2">
             <h1 class="font-bold p-2">Transaction Type</h1>
             <div class="flex flex-row items-center space-x-2">
                 <FilterItem value={"All"}
@@ -73,7 +73,7 @@
                 />
             </div>
         </div>
-        <div class="flex flex-col justify-start items-start space-x-2 overflow-scroll pb-2">
+        <div class="flex flex-col justify-start items-start space-x-2 pb-2">
             <h1 class="font-bold p-2">Transaction Method</h1>
             <div class="flex flex-row items-center space-x-2">
                 <FilterItem value={"All"}
@@ -91,18 +91,20 @@
             </div>
         </div>
         <h1 class="font-bold px-2">Transaction Category</h1>
-        <div class="flex flex-col justify-start items-start space-x-2 overflow-scroll px-2">
+        <div class="flex flex-col justify-start items-start space-x-2 px-2">
             <div class="flex flex-row items-center space-x-2">
                 {#if filteredCategories}
                     <FilterItem value={"All"}
                         selected={filter.category === "All"}
                         onclick={() => filter.category = "All"}
                     />
-                    {#each filteredCategories as category}
-                        <FilterItem value={category}
-                            selected={filter.category === category}
-                            onclick={() => filter.category = category}
-                        />
+                    {#each filteredCategories as category, index}
+                        {#if category}
+                            <FilterItem value={category}
+                                selected={filter.category === category}
+                                onclick={() => filter.category = category}
+                            />
+                        {/if}
                     {/each}
                 {:else}
                     <Empty value="No category available." />
