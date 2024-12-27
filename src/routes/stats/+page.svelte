@@ -36,21 +36,6 @@
         '#89CFF1'
     ];
 
-    const getFinalAmount = async (): Promise<number> => {
-
-        const db = await Database.load("sqlite:database.db");
-
-        let transactions: Array<any> = await db.select("\
-            SELECT SUM(transactions.amount) AS amount\
-            FROM transactions\
-            WHERE transactions.date BETWEEN $1 AND $2\
-            GROUP BY category_id ORDER BY amount DESC",
-            [0, props.endDate]
-        );
-
-        return transactions[0].amount;
-    }
-
     const getAllTransaction = async (type: String): Promise<Array<any>> => {
 
         const db = await Database.load("sqlite:database.db");
@@ -173,19 +158,9 @@
 
 <Main>
     <div class="sticky top-4 bg-blue-50">
-        <!-- <Title title="Stats" /> -->
         <Calendar bind:props />
-        <div class="flex justify-center align-middle pt-0">
-            {#key props.startDate}
-                {#await getFinalAmount() then amount}
-                    <h1 class="text-2xl text-black py-2" in:fly|global={{ y: -50 }}>
-                        <Currency amount={amount} bold={true} />
-                    </h1>
-                {/await}
-            {/key}
-        </div>
         <div
-            class="my-4 flex flex-row justify-evenly text-xl bg-white p-2 rounded-xl w-2/3 mx-auto shadow-xl shadow-blue-100"
+            class="my-2 flex flex-row justify-evenly text-xl bg-white p-2 rounded-xl w-2/3 mx-auto shadow-xl shadow-blue-100"
             in:fly={{ y: -50 }}
         >
             <button
@@ -202,7 +177,7 @@
             </button>
         </div>
         <div class="flex flex-row justify-center">
-            <section class="py-2 w-4/6 h-full">
+            <section class="py-2 w-3/5 h-full">
                 <canvas bind:this={canvas} in:scale|global={{ duration: 500 }}></canvas>
             </section>
         </div>

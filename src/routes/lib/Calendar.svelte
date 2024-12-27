@@ -4,6 +4,8 @@
     import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
     import { onMount } from "svelte";
     import { fly } from "svelte/transition";
+    import Currency from "./Currency.svelte";
+    import Database from "@tauri-apps/plugin-sql";
 
     let { props = $bindable() } = $props();
 
@@ -57,6 +59,23 @@
         'December'
     ];
 
+    const getFinalAmount = async (): Promise<number> => {
+
+        const db = await Database.load("sqlite:database.db");
+
+        let transactions: Array<any> = await db.select("\
+            SELECT SUM(transactions.amount) AS amount\
+            FROM transactions\
+            WHERE transactions.date BETWEEN $1 AND $2\
+            GROUP BY category_id ORDER BY amount DESC",
+            [0, props.endDate]
+        );
+
+        return transactions.length
+            ? transactions[0].amount
+            : 0;
+    }
+
     onMount(() => {
 
         let date = new Date(props.startDate);
@@ -66,7 +85,7 @@
     })
 </script>
 
-<div class="flex flex-row items-center justify-between text-2xl pb-4 pt-2 w-10/12 mx-auto">
+<div class="flex flex-row items-center justify-between text-xl pb-2 pt-0 w-11/12 mx-auto">
     <button
         class="flex flex-row items-center justify-center px-4 w-[45px] h-[45px] bg-blue-900 rounded-lg text-white"
         onclick={() => decreaseMonth()}
@@ -75,10 +94,19 @@
         <Fa icon={faArrowLeft} />
     </button>
     {#key currentMonth}
-        <div class="px-4 font-bold flex flex-col justify-center items-center text-md" in:fly={{ y: -50 }}>
-            {months[currentMonth]}
+    <div class="flex flex-col justify-center items-center">
+        <div class="space-x-2 font-bold flex flex-row justify-center items-center text-md" in:fly={{ y: -50 }}>
+            <span>{months[currentMonth]}</span>
             <span class="font-normal">{currentYear}</span>
         </div>
+        <div class="flex justify-center align-middle pt-0">
+            {#await getFinalAmount() then amount}
+                <h1 class="text-xl text-black py-2" in:fly|global={{ y: -50 }}>
+                    <Currency amount={amount} bold={true} />
+                </h1>
+            {/await}
+        </div>
+    </div>
     {/key}
     <button
         class="flex flex-row items-center justify-center px-4 w-[45px] h-[45px] bg-blue-900 rounded-lg text-white"
