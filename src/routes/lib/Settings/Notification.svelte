@@ -45,8 +45,8 @@
 
 <div class="w-full h-full bg-blue-900/95 top-0 left-0 fixed z-[999]" in:fly={{ y: 50, duration: 0 }}>
     <div class="fixed z-[999] inset-0 top-20 mx-auto
-        p-5 border w-[90%] h-1/2 rounded-xl bg-white flex
-        flex-col space-y-2 justify-center"
+        p-5 border w-[90%] h-1/3 rounded-xl bg-white flex
+        flex-col space-y-2 justify-between"
         in:fly|global={{ y: 50, duration: 100 }} out:fly|global={{ y: -50, duration: 100 }}
     >
         <div class="flex flex-row justify-between items-center scrollbar-hide pt-2">
