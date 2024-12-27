@@ -9,7 +9,7 @@
 
     let amount = $state(0);
 
-    const handleAddCategory = async () => {
+    const handleChangeNotify = async () => {
 
         let username = localStorage.getItem('username');
 
@@ -23,6 +23,8 @@
             );
 
         }
+
+        localStorage.setItem('notify', amount.toString());
 
         showNotification = false;
     };
@@ -61,6 +63,6 @@
                 />
             </div>
         </div>
-        <HugeButton value="Add" onclick={handleAddCategory} />
+        <HugeButton value="Add" onclick={handleChangeNotify} />
     </div>
 </div>
