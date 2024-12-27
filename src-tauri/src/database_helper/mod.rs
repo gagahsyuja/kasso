@@ -11,7 +11,8 @@ pub fn get_migrations() -> Vec<Migration>
                 role TEXT,
                 username TEXT,
                 password TEXT,
-                notify INTEGER
+                notify INTEGER,
+                new_notification INTEGER
             );",
             kind: MigrationKind::Up
         },
