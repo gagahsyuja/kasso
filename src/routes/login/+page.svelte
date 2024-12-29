@@ -1,7 +1,7 @@
 <script lang="ts">
     import Fa from "svelte-fa";
     import Database from "@tauri-apps/plugin-sql";
-    import Input from "../lib/Input.svelte";
+    import Input from "$lib/Input.svelte";
     import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
