@@ -16,7 +16,7 @@
 
 </script>
 
-<div class="fixed bottom-0 w-full bg-white p-0 flex justify-center z-40 shadow-xl shadow-blue-100">
+<div class="fixed bottom-0 w-full bg-white p-0 flex justify-center z-40 shadow-nav shadow-blue-200">
     <div class="bg-white w-full flex flex-col justify-center rounded-lg shadow-xl shadow-blue-100">
         <div class="flex flex-row items-center justify-evenly w-full text-black bg-white">
             <Button icon={faBook} title={date} target="/" name="home" bind:currentPage onclick={() => currentPage === 'home'} />
