@@ -82,13 +82,15 @@
                     {localStorage.getItem('role') === 'member' ? "Member" : "Treasurer"}
                 </div>
             </div>
-            <a href="/notification" in:fly={{ x: 50, y: -50 }}>
-                {#await checkNotification() then exist}
-                    <div class="{ exist ? "zoom" : ""}">
-                        <Fa icon={faBell} size="1.35x" class="px-4" />
-                    </div>
-                {/await}
-            </a>
+            {#key showModal}
+                <a href="/notification" in:fly={{ x: 50, y: -50 }}>
+                    {#await checkNotification() then exist}
+                        <div class="{ exist ? "zoom" : ""}">
+                            <Fa icon={faBell} size="1.35x" class="px-4" />
+                        </div>
+                    {/await}
+                </a>
+            {/key}
         </div>
         <div class="flex flex-col justify-center bg-blue-900 rounded-2xl shadow-xl shadow-blue-100" in:fly|global={{ y: 50, x: -50 }}>
             <div class="flex flex-col justify-center items-center">
