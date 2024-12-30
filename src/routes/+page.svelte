@@ -71,9 +71,24 @@
             : false;
     };
 
-    onMount(() => {
+    const setup = async () => {
+        
+        const db = await Database.load("sqlite:database.db");
+
+        const exist: Array<object> = await db.select("SELECT * FROM categories WHERE name = $1", ['other']);
+
+        if (!exist.length) {
+            await db.execute("INSERT INTO categories (name, type) VALUES ($1, $2)", [ 'Other', 'in' ]);
+            await db.execute("INSERT INTO categories (name, type) VALUES ($1, $2)", [ 'Other', 'out' ]);
+        }
+    }
+
+    onMount(async () => {
 
         if (!localStorage.getItem("username")) goto('/login', { replaceState: true });
+
+        await setup();
+
     });
 </script>
 
