@@ -113,7 +113,7 @@
                 <span class="text-lg font-bold p-2">Amount</span>
                 <div class="flex flex-row items-center space-x-2">
                     <input
-                        type="number"
+                        type="tel"
                         class="w-5/6 border-2 border-blue-100 shadow-xl shadow-blue-100 ring-0 rounded-xl"
                         bind:value={payload.amount}
                     />

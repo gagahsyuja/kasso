@@ -57,7 +57,7 @@
             <span class="font-bold p-2">Notify me at</span>
             <div class="flex flex-row items-center space-x-2">
                 <input
-                    type="number"
+                    type="tel"
                     class="w-full border-2 border-blue-100 shadow-xl shadow-blue-100 focus:ring-0 rounded-xl"
                     bind:value={amount}
                 />
