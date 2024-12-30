@@ -116,8 +116,8 @@
                 />
             </div>
         </div>
-        <div class="flex flex-col justify-center items-start space-x-2">
-            <span class="text-lg font-bold p-2">Category</span>
+        <span class="text-lg font-bold p-2">Category</span>
+        <div class="flex flex-col justify-center items-start space-x-2 overflow-scroll">
             <div class="flex flex-row items-center space-x-2">
                 {#each filteredCategories as category}
                     <AddItem value={category.name} selected={payload.category === category.id}

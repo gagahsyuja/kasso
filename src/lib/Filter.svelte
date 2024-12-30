@@ -91,21 +91,36 @@
             </div>
         </div>
         <h1 class="font-bold px-2">Transaction Category</h1>
-        <div class="flex flex-col justify-start items-start space-x-2 px-2">
+        <div class="flex flex-col justify-start items-start space-x-2 px-2 min-h-8 w-full overflow-scroll">
             <div class="flex flex-row items-center space-x-2">
                 {#if filteredCategories}
                     <FilterItem value={"All"}
                         selected={filter.category === "All"}
                         onclick={() => filter.category = "All"}
                     />
-                    {#each filteredCategories as category, index}
-                        {#if category}
-                            <FilterItem value={category}
-                                selected={filter.category === category}
-                                onclick={() => filter.category = category}
-                            />
-                        {/if}
-                    {/each}
+                    {#if filter.type === "All"}
+                        <FilterItem value={"Other"}
+                            selected={filter.category === "Other"}
+                            onclick={() => filter.category = "Other"}
+                        />
+                        {#each filteredCategories as category, index}
+                            {#if category && category !== "Other"}
+                                <FilterItem value={category}
+                                    selected={filter.category === category}
+                                    onclick={() => filter.category = category}
+                                />
+                            {/if}
+                        {/each}
+                    {:else}
+                        {#each filteredCategories as category, index}
+                            {#if category}
+                                <FilterItem value={category}
+                                    selected={filter.category === category}
+                                    onclick={() => filter.category = category}
+                                />
+                            {/if}
+                        {/each}
+                    {/if}
                 {:else}
                     <Empty value="No category available." />
                 {/if}
