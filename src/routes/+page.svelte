@@ -12,9 +12,19 @@
     import { fly } from "svelte/transition";
     import { goto } from "$app/navigation";
 
+    interface Transaction {
+        id: number,
+        amount: number,
+        type: string,
+        method: string,
+        date: number,
+        description: string,
+        category_id: number
+    };
+
     let showModal = $state(false);
     let object = $state({
-        last: [{}],
+        last: [{} as Transaction],
         totalIn: 0,
         totalOut: 0
     });

@@ -10,6 +10,11 @@
     import { flip } from "svelte/animate";
     import { onMount } from "svelte";
 
+    interface DateFilter {
+        from: Date | null,
+        to: Date | null
+    };
+
     let visible = $state(false);
     let showModal = $state(false);
 
@@ -19,10 +24,7 @@
         type: 'All',
         method: 'All',
         category: 'All',
-        date: {
-            from: null,
-            to: null
-        }
+        date: {} as DateFilter
     });
 
     const getCategories = async (): Promise<Array<any>> => {
