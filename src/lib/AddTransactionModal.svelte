@@ -14,14 +14,22 @@
     let payload = $state({
         type: 'in',
         amount: 0,
-        category: null,
+        category: 1,
         method: 'cash',
         description: '',
         date: new Date()
     });
 
     const handleTypeChange = (selected: string) => {
+
         payload.type = selected;
+
+        if (payload.type === 'out') {
+            payload.category = 2;
+        } else {
+            payload.category = 1;
+        }
+
         filteredCategories = categories
             ? categories.filter((cat: any) => cat.type === payload.type)
             : [];
@@ -77,9 +85,9 @@
 </script>
 
 {#await load() then}
-<div class="w-full h-full bg-blue-900/95 top-0 left-0 fixed z-[999]" in:scale={{ duration: 50 }}>
-    <div class="fixed z-[999] inset-0 top-20 mx-auto
-        p-5 border w-[90%] h-4/5 rounded-xl bg-white flex
+<div class="w-full h-full bg-white/100 top-0 left-0 fixed z-[999]" in:scale={{ duration: 50 }}>
+    <div class="fixed z-[999] inset-0 top-0 mx-auto
+        p-5 w-[90%] h-6/7 rounded-xl bg-white flex
         flex-col space-y-2 justify-between"
         in:fly|global={{ y: 50, duration: 100 }} out:fly|global={{ y: -50, duration: 100 }}
     >
@@ -108,6 +116,16 @@
                 />
             </div>
         </div>
+        <div class="flex flex-col justify-center items-start space-x-2">
+            <span class="text-lg font-bold p-2">Category</span>
+            <div class="flex flex-row items-center space-x-2">
+                {#each filteredCategories as category}
+                    <AddItem value={category.name} selected={payload.category === category.id}
+                        onclick={() => payload.category = category.id}
+                    />
+                {/each}
+            </div>
+        </div>
         <div class="flex flex-row justify-start items-start">
             <div class="flex flex-col justify-center items-start space-x-2">
                 <span class="text-lg font-bold p-2">Amount</span>
@@ -129,19 +147,6 @@
                         onclick={() => payload.method = 'bank'}
                     />
                 </div>
-            </div>
-        </div>
-        <div class="flex flex-col justify-center items-start space-x-2 overflow-scroll">
-            <span class="text-lg font-bold p-2">Category</span>
-            <div class="flex flex-row items-center space-x-2">
-                <AddItem value={"Other"} selected={payload.category === null}
-                    onclick={() => payload.category = null}
-                />
-                {#each filteredCategories as category}
-                    <AddItem value={category.name} selected={payload.category === category.id}
-                        onclick={() => payload.category = category.id}
-                    />
-                {/each}
             </div>
         </div>
         <div class="flex flex-col justify-center items-start">
