@@ -100,7 +100,7 @@
         </div>
         <div class="flex flex-col justify-center bg-blue-900 rounded-2xl shadow-xl shadow-blue-100" in:fly|global={{ y: 50, x: -50 }}>
             <div class="flex flex-col justify-center items-center">
-                <div class="flex flex-col justify-center items-center py-6 px-4">
+                <div class="flex flex-col justify-center items-center py-4 px-4">
                     <h1 class="text-md font-bold text-gray-300">
                         Total Balance
                     </h1>
@@ -108,9 +108,9 @@
                         <Currency amount={object.totalIn - object.totalOut} bold={true} />
                     </h1>
                 </div>
-                <hr class="w-4/5 " />
-                <div class="flex flex-row justify-center items-center py-6 flex-wrap space-y-0">
-                    <div class="flex flex-col justify-center items-center px-4">
+                <hr class="w-4/5" />
+                <div class="flex flex-row justify-center items-center pb-4 pt-1 flex-wrap space-y-0">
+                    <div class="flex flex-col justify-center items-center px-4 py-3">
                         <div class="flex flex-row justify-center items-center">
                             <div class="p-4 bg-white rounded-xl w-12 h-12 flex justify-center items-center">
                                 <Fa icon={faArrowTrendUp} size="1.2x" />
@@ -126,7 +126,7 @@
                         </div>
                     </div>
                     <div class="flex flex-col justify-center items-center px-4">
-                        <div class="flex flex-row justify-center items-center self-start">
+                        <div class="flex flex-row justify-center items-center self-start min-w-32">
                             <div class="p-4 bg-white rounded-xl w-12 h-12 flex justify-center items-center">
                                 <Fa icon={faArrowTrendDown} size="1.2x" />
                             </div>
