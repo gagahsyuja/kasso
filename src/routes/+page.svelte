@@ -71,13 +71,9 @@
             : false;
     };
 
-    onMount(async () => {
+    onMount(() => {
 
         if (!localStorage.getItem("username")) goto('/login', { replaceState: true });
-        // const db = await Database.load("sqlite:database.db");
-        // db.select("SELECT * FROM transactions").then(response => console.log(response));
-        // db.select("SELECT * FROM transactions WHERE date BETWEEN 1733653284237 AND 1733826084237").then(response => console.log(response));
-        // db.execute("DELETE FROM users WHERE id = 2").then(response => console.log(response));
     });
 </script>
 
