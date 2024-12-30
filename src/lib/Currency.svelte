@@ -6,5 +6,5 @@
 </script>
 
 <span>
-    Rp<span bind:this={number} class="{bold ? "font-bold" : ""} {size}">{accounting.formatMoney(amount, "", subUnit ? 2 : 0, ".", ",")}</span>
+    <span class="text-lg">Rp</span><span bind:this={number} class="{bold ? "font-bold text-lg" : ""} {size}">{accounting.formatMoney(amount, "", subUnit ? 2 : 0, ".", ",")}</span>
 </span>

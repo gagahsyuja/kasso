@@ -82,7 +82,7 @@
             {/if}
         </div>
         <div class="flex flex-col pl-4">
-            <span class="font-bold text-lg capitalize">{category}</span>
+            <span class="font-bold text-sm capitalize">{category}</span>
             <span class="text-sm">{formatDistanceToNow(dateObj, { addSuffix: true })}</span>
         </div>
     </div>
