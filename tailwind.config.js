@@ -20,6 +20,9 @@ export default {
           800: '#CC4522',
           900: '#A5371B'
         }
+      },
+      boxShadow: {
+        'nav': '0px 0px 10px 0px rgba(0,0,0,0.2)'
       }
     }
   },
@@ -27,11 +30,3 @@ export default {
       flowbitePlugin
   ]
 };
-// export default {
-//   content: ['./src/**/*.{html,js,svelte,ts}'],
-//   theme: {
-//     extend: {},
-//   },
-//   plugins: [],
-// }
-//
