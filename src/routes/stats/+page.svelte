@@ -14,6 +14,8 @@
     let chart: Chart;
     let ready = false;
 
+    let currentPage = $state('stats');
+
     let date = new Date();
 
     let startDate = Date.parse(`${date.getMonth() + 1}/01/${date.getFullYear()}`);
@@ -154,7 +156,9 @@
     })
 </script>
 
-<Navigation />
+{#key currentPage}
+    <Navigation bind:currentPage />
+{/key}
 
 <Main>
     <div class="sticky top-2 bg-blue-50">

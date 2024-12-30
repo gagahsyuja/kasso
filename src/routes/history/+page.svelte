@@ -13,6 +13,8 @@
     let visible = $state(false);
     let showModal = $state(false);
 
+    let currentPage = $state('history');
+
     let filter = $state({
         type: 'All',
         method: 'All',
@@ -63,7 +65,9 @@
 
 </script>
 
-<Navigation bind:showModal />
+{#key currentPage}
+    <Navigation bind:showModal bind:currentPage />
+{/key}
 
 <Main>
     <div class="flex flex-row justify-between items-center">
@@ -71,7 +75,7 @@
         <button
             onclick={() => visible = true}
             class="text-md font-bold text-blue-900 px-4"
-            in:fly={{ x: 50, y: -50 }}
+            in:fly={{ x: 50, y: -50, delay: 100 }}
         >
             Filter
         </button>

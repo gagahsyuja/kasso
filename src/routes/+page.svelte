@@ -24,6 +24,8 @@
         load();
     })
 
+    let currentPage = $state('home');
+
     const load = async () => {
 
         const db = await Database.load("sqlite:database.db");
@@ -90,7 +92,7 @@
         </div>
         <div class="flex flex-col justify-center bg-blue-900 rounded-2xl shadow-xl shadow-blue-100" in:fly|global={{ y: 50, x: -50 }}>
             <div class="flex flex-col justify-center items-center">
-                <div class="flex flex-col justify-center items-center py-10 px-4">
+                <div class="flex flex-col justify-center items-center py-6 px-4">
                     <h1 class="text-md font-bold text-gray-300">
                         Total Balance
                     </h1>
@@ -99,7 +101,7 @@
                     </h1>
                 </div>
                 <hr class="w-4/5 " />
-                <div class="flex flex-row justify-center items-center py-10">
+                <div class="flex flex-row justify-center items-center py-6 flex-wrap space-y-0">
                     <div class="flex flex-col justify-center items-center px-4">
                         <div class="flex flex-row justify-center items-center">
                             <div class="p-4 bg-white rounded-xl w-12 h-12 flex justify-center items-center">
@@ -166,7 +168,10 @@
         </div>
     {/await}
 </Main>
-<Navigation bind:showModal />
+
+{#key currentPage}
+    <Navigation bind:showModal />
+{/key}
 
 <style>
     .zoom {

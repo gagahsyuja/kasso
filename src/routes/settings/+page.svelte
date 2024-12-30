@@ -14,13 +14,17 @@
     let showCategory = $state(false);
     let showNotification = $state(false);
 
+    let currentPage = $state('settings');
+
     const logout = () => {
         localStorage.clear();
         goto('/login', { replaceState: true });
     }
 </script>
 
-<Navigation />
+{#key currentPage}
+    <Navigation bind:currentPage />
+{/key}
 <Main>
     <Title title="Settings" />
     <div class="h-full flex flex-col justify-between items-stretch space-y-2">
