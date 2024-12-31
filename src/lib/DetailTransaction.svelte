@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Database from "@tauri-apps/plugin-sql";
     import Currency from "./Currency.svelte";
     import { scale, fade } from "svelte/transition";
     import { fly } from 'svelte/transition';
@@ -30,6 +31,19 @@
     ];
 
     let { data } = $props();
+
+    let category = $state('');
+
+    $effect(() => {
+        Database.load("sqlite:database.db").then((db: Database) => {
+            db.select(
+                "SELECT name FROM categories WHERE id=?",
+                [data.categoryId]
+            ).then((categories: any) => {
+                category = categories[0].name
+            });
+        });
+    })
 </script>
 
 <div class="w-full h-full bg-blue-900/95 top-0 left-0 fixed z-[999]" in:scale={{ duration: 50 }}>
@@ -71,7 +85,7 @@
                 <div class="flex flex-col p-2">
                     <span class="text-lg font-bold">Category</span>
                     <span class="">
-                        Other
+                        {category}
                     </span>
                 </div>
             </div>

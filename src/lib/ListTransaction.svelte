@@ -37,9 +37,7 @@
                 "SELECT name FROM categories WHERE id=?",
                 [categoryId]
             ).then((categories: any) => {
-                category = categories.length !== 0
-                    ? categories[0].name
-                    : 'Other';
+                category = categories[0].name
             });
         });
 
