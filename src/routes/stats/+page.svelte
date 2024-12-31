@@ -15,6 +15,7 @@
     let ready = false;
 
     let currentPage = $state('stats');
+    let showModal = $state(false);
 
     let date = new Date();
 
@@ -113,6 +114,7 @@
     $effect(() => {
         props.startDate;
         props.endDate;
+        showModal;
         generateChart(selected);
     })
 
@@ -157,63 +159,67 @@
 </script>
 
 {#key currentPage}
-    <Navigation bind:currentPage />
+    <Navigation bind:currentPage bind:showModal />
 {/key}
 
 <Main>
     <div class="sticky top-2 bg-blue-50">
         <Calendar bind:props />
-        <div
-            class="my-2 flex flex-row justify-evenly text-xl bg-white p-2 rounded-xl w-2/3 mx-auto shadow-xl shadow-blue-100"
-            in:fly={{ y: -50 }}
-        >
-            <button
-                onclick={() => selected = 'in'}
-                class={`${selected === 'in' ? 'text-blue-800' : 'text-black'}`}
+        {#key showModal}
+            <div
+                class="my-2 flex flex-row justify-evenly text-xl bg-white p-2 rounded-xl w-2/3 mx-auto shadow-xl shadow-blue-100"
+                in:fly={{ y: -50 }}
             >
-                <span>Income</span>
-            </button>
-            <button
-                onclick={() => selected = 'out'}
-                class={`${selected === 'out' ? 'text-blue-800' : 'text-black'}`}
-            >
-                Expense
-            </button>
-        </div>
+                <button
+                    onclick={() => selected = 'in'}
+                    class={`${selected === 'in' ? 'text-blue-800' : 'text-black'}`}
+                >
+                    <span>Income</span>
+                </button>
+                <button
+                    onclick={() => selected = 'out'}
+                    class={`${selected === 'out' ? 'text-blue-800' : 'text-black'}`}
+                >
+                    Expense
+                </button>
+            </div>
+        {/key}
         <div class="flex flex-row justify-center">
             <section class="py-2 w-3/5 h-full">
                 <canvas bind:this={canvas} in:scale|global={{ duration: 500 }}></canvas>
             </section>
         </div>
     </div>
-    {#key props.startDate}
-        {#await getTotalAmountByMonth(selected) then amount}
-            <h1 class="text-center text-lg py-2 pt-4" in:fly|global={{ y: 50 }}>
-                <Currency amount={amount} bold={true} /> total {selected === 'in' ? 'income' : 'expense'}
-            </h1>
-        {/await}
-        {#await getAllTransaction(selected) then transactions}
-            {#each transactions as transaction, i}
-                <div
-                    class="flex flex-row justify-between p-4 rounded-lg border-t-gray-300 border-b-2"
-                    in:fly|global={{ y: 50, delay: 0 }}
-                >
-                    <span class="text-lg font-bold">{transaction.category}</span>
-                    <span class="text-md">
-                        {#if selected === 'out'}
-                            -
-                        {/if}
-                        <Currency amount={transaction.amount} bold={true} subUnit={false} />
-                    </span>
-                </div>
-            {:else}
-                <div
-                    class="text-center font-normal text-xl"
-                    in:fly|global={{ y: 50, delay: 0 }}
-                >
-                    Empty
-                </div>
-            {/each}
-        {/await}
+    {#key showModal}
+        {#key props.startDate}
+            {#await getTotalAmountByMonth(selected) then amount}
+                <h1 class="text-center text-lg py-2 pt-4" in:fly|global={{ y: 50 }}>
+                    <Currency amount={amount} bold={true} /> total {selected === 'in' ? 'income' : 'expense'}
+                </h1>
+            {/await}
+            {#await getAllTransaction(selected) then transactions}
+                {#each transactions as transaction, i}
+                    <div
+                        class="flex flex-row justify-between p-4 rounded-lg border-t-gray-300 border-b-2"
+                        in:fly|global={{ y: 50, delay: 0 }}
+                    >
+                        <span class="text-lg font-bold">{transaction.category}</span>
+                        <span class="text-md">
+                            {#if selected === 'out'}
+                                -
+                            {/if}
+                            <Currency amount={transaction.amount} bold={true} subUnit={false} />
+                        </span>
+                    </div>
+                {:else}
+                    <div
+                        class="text-center font-normal text-xl"
+                        in:fly|global={{ y: 50, delay: 0 }}
+                    >
+                        Empty
+                    </div>
+                {/each}
+            {/await}
+        {/key}
     {/key}
 </Main>
