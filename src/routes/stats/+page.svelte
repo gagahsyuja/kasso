@@ -21,8 +21,8 @@
     let startDate = Date.parse(`${date.getMonth() + 1}/01/${date.getFullYear()}`);
     startDate = parseInt(startDate.toString());
 
-    let endDate = Date.parse(`${date.getMonth() + 1}/31/${date.getFullYear()}`);
-    endDate = parseInt(endDate.toString());
+    let endDate: Date | number = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59);
+    endDate = endDate.getTime();
 
     let props = $state({
         startDate,
@@ -43,7 +43,7 @@
         const db = await Database.load("sqlite:database.db");
 
         let transactions: Array<any> = await db.select("\
-            SELECT categories.name AS category, SUM(transactions.amount) AS amount\
+            SELECT date, categories.name AS category, SUM(transactions.amount) AS amount\
             FROM transactions\
             LEFT JOIN categories ON transactions.category_id = categories.id\
             WHERE transactions.type = $1\
@@ -78,7 +78,7 @@
 
             if (transactions.length) {
 
-                let labels = transactions.map(row => row.category ? row.category : 'Other');
+                let labels = transactions.map(row => row.category);
                 let data = transactions.map(row => row.amount);
 
                 let datasets = [
@@ -125,7 +125,7 @@
                     chart = new Chart(canvas, {
                         type: 'pie',
                         data: {
-                            labels: transactions.map(row => row.category ? row.category : 'Other'),
+                            labels: transactions.map(row => row.category),
                             datasets: [
                                 {
                                     label: 'Total amount',
@@ -194,12 +194,11 @@
         {/await}
         {#await getAllTransaction(selected) then transactions}
             {#each transactions as transaction, i}
-                {@const category = transaction.category ? transaction.category : 'Other'}
                 <div
                     class="flex flex-row justify-between p-4 rounded-lg border-t-gray-300 border-b-2"
                     in:fly|global={{ y: 50, delay: 0 }}
                 >
-                    <span class="text-lg font-bold">{category}</span>
+                    <span class="text-lg font-bold">{transaction.category}</span>
                     <span class="text-md">
                         {#if selected === 'out'}
                             -
