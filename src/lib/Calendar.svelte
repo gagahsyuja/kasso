@@ -16,7 +16,11 @@
         
         let startDate = Date.parse(`${month + 1}/01/${year}`);
 
-        let endDate = Date.parse(`${month + 1}/31/${year}`);
+        // let endDate = Date.parse(`${month + 1}/31/${year}`);
+        // let endDate: Date | number = new Date(year, month + 1, 1, 0, 23, 59, 59);
+        let endDate: Date | number = new Date(year, month + 1, 0, 23, 59, 59);
+        console.log(year, month);
+        endDate = endDate.getTime();
 
         props.startDate = startDate;
         props.endDate = endDate;
@@ -67,7 +71,7 @@
             SELECT SUM(transactions.amount) AS amount\
             FROM transactions\
             WHERE transactions.date BETWEEN $1 AND $2\
-            GROUP BY category_id ORDER BY amount DESC",
+            ORDER BY amount DESC",
             [0, props.endDate]
         );
 
@@ -82,6 +86,8 @@
 
         currentMonth = date.getMonth();
         currentYear = date.getFullYear();
+
+        setDate(currentMonth, currentYear);
     })
 </script>
 
