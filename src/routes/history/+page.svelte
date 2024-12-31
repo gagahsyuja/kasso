@@ -94,6 +94,7 @@
             <div class="overflow-scroll">
                 <div in:fly|global={{ y: 50, delay: 0 }} class="py-2">
                     <ListTransaction
+                        id={transaction.id}
                         amount={transaction.amount}
                         type={transaction.type}
                         date={transaction.date}
