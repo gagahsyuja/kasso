@@ -15,11 +15,8 @@
     const setDate = (month: number, year: number) => {
         
         let startDate = Date.parse(`${month + 1}/01/${year}`);
-
-        // let endDate = Date.parse(`${month + 1}/31/${year}`);
-        // let endDate: Date | number = new Date(year, month + 1, 1, 0, 23, 59, 59);
         let endDate: Date | number = new Date(year, month + 1, 0, 23, 59, 59);
-        console.log(year, month);
+
         endDate = endDate.getTime();
 
         props.startDate = startDate;
