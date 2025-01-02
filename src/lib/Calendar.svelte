@@ -65,12 +65,28 @@
         const db = await Database.load("sqlite:database.db");
 
         let transactions: Array<any> = await db.select("\
-            SELECT SUM(transactions.amount) AS amount\
+            SELECT\
+                (SUM(CASE\
+                    WHEN type = 'in' THEN amount\
+                    ELSE 0\
+                END) -\
+                SUM(CASE\
+                    WHEN type = 'out'\
+                    THEN amount ELSE 0\
+                END)) AS amount\
             FROM transactions\
             WHERE transactions.date BETWEEN $1 AND $2\
             ORDER BY amount DESC",
             [0, props.endDate]
         );
+
+        // let transactions: Array<any> = await db.select("\
+        //     SELECT SUM(transactions.amount) AS amount\
+        //     FROM transactions\
+        //     WHERE transactions.date BETWEEN $1 AND $2\
+        //     ORDER BY amount DESC",
+        //     [0, props.endDate]
+        // );
 
         return transactions.length
             ? transactions[0].amount
