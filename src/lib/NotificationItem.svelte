@@ -1,7 +1,7 @@
 <script lang="ts">
     import { formatDistanceToNow } from 'date-fns';
     import Fa from 'svelte-fa';
-    import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+    import { faCircleExclamation, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
     import Database from "@tauri-apps/plugin-sql";
     import DetailTransaction from './DetailTransaction.svelte';
     import Currency from './Currency.svelte';
@@ -24,8 +24,10 @@
 
     let {
         edit = false,
+        id = 69,
         amount = 69,
         type = 'in',
+        method = 'bank',
         date = 1733602382348,
         description = 'Description goes here',
         categoryId = 0
@@ -36,8 +38,10 @@
 
     let data = $state({
         showDetailTransaction: false,
+        id,
         amount,
         type,
+        method,
         date,
         description,
         categoryId
@@ -57,8 +61,10 @@
 
         data = {
             showDetailTransaction: false,
+            id,
             amount,
             type,
+            method,
             date,
             description,
             categoryId
@@ -74,7 +80,7 @@
 {/if}
 
 <div class="flex flex-col justify-center items-center space-y-4">
-    <span class="px-4 font-bold text-md">
+    <span class="pt-2 font-semibold text-md text-gray-600">
         {getDate(data.date)} {months[getMonth(data.date)]} {getYear(data.date)} at {getHours(data.date)}:{getMinutes(data.date)}
     </span>
     <button
@@ -86,18 +92,12 @@
     >
         <div class="flex flex-row">
             <div class="flex flex-row items-center 
-                {type === 'in' ? "bg-blue-100" : "bg-blue-100"}
-                w-[50px] h-[50px] p-4 rounded-full
+                p-0 rounded-full text-red-500
             ">
-                {#if type === 'in'}
-                    <Fa icon={faArrowDown} size="1.5x"/>
-                {:else}
-                    <Fa icon={faArrowUp} size="1.5x"/>
-                {/if}
+                <Fa icon={faCircleExclamation} size="2.0x"/>
             </div>
-            <div class="flex flex-col pl-4">
-                <span class="font-bold text-lg capitalize">{category}</span>
-                <span class="text-sm">{formatDistanceToNow(dateObj, { addSuffix: true })}</span>
+            <div class="flex flex-col pl-2 justify-center items-center">
+                <span class="font-bold text-lg capitalize">Large transaction!</span>
             </div>
         </div>
         <span class="text-lg">
