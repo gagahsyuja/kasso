@@ -16,7 +16,7 @@
         const db = await Database.load("sqlite:database.db");
         
         const result: Array<any> = await db.select(
-            "SELECT * FROM transactions WHERE amount >= $1 ORDER BY date ASC",
+            "SELECT * FROM transactions WHERE amount >= $1 ORDER BY date DESC",
             [ notify ]
         );
 
@@ -48,10 +48,13 @@
             {#each transactions as transaction}
                 <NotificationItem
                     edit={false}
+                    id={transaction.id}
                     amount={transaction.amount}
+                    method={transaction.method}
                     type={transaction.type}
                     date={transaction.date}
                     description={transaction.description}
+                    categoryId={transaction.category_id}
                 />
             {:else}
                 <Empty value="No notifications yet!" />
