@@ -14,14 +14,16 @@
         method = 'cash',
         date = 1733602382348,
         description = 'Description goes here',
-        categoryId = 0
+        categoryId = 0,
+        showDetailTransaction = $bindable(false),
+        showPopup = $bindable(false),
+        refresh = $bindable(false)
     } = $props();
 
     let dateObj = $state(new Date(date));
     let category = $state();
 
     let data = $state({
-        showDetailTransaction: false,
         id,
         amount,
         type,
@@ -42,7 +44,6 @@
         });
 
         data = {
-            showDetailTransaction: false,
             id,
             amount,
             type,
@@ -51,11 +52,14 @@
             description,
             categoryId
         };
+
     });
 </script>
 
-{#if data.showDetailTransaction}
+{#if showDetailTransaction}
     <DetailTransaction
+        bind:showDetailTransaction
+        bind:refresh
         { data }
     />
 
@@ -63,7 +67,7 @@
 
 <button
     onclick={() => {
-        if (!edit) {data.showDetailTransaction = true}}
+        if (!edit) {showDetailTransaction = true}}
     }
     class="flex flex-row justify-between items-center bg-white shadow-xl shadow-blue-100
         px-4 py-4 rounded-xl w-full text-left"

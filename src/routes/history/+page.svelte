@@ -17,6 +17,10 @@
 
     let visible = $state(false);
     let showModal = $state(false);
+    let showPopup = $state(false);
+    let refresh = $state(false);
+
+    let showDetailTransaction = $state(false);
 
     let currentPage = $state('history');
 
@@ -39,7 +43,7 @@
 
         const db = await Database.load("sqlite:database.db");
 
-        let query = 'SELECT * FROM transactions LEFT JOIN categories ON transactions.category_id = categories.id WHERE transactions.id IS NOT NULL';
+        let query = 'SELECT transactions.id, category_id, user_id, description, transactions.type, amount, method, date, name FROM transactions LEFT JOIN categories ON transactions.category_id = categories.id WHERE transactions.id IS NOT NULL';
 
         if (type !== "All") query = `${query} AND transactions.type = "${type}"`;
         if (method !== "All") query = `${query} AND transactions.method = "${method}"`;
@@ -61,6 +65,8 @@
         }
 
         query = `${query} ORDER BY transactions.date`;
+
+        console.log(await db.select(query))
 
         return await db.select(query);
     };
@@ -87,7 +93,7 @@
             <Filter bind:visible bind:filter { categories } />
         {/if}
     {/await}
-    {#key showModal}
+    {#key [ showModal, refresh ]}
 
     {#await loadWithFilter(filter.type, filter.method, filter.category, filter.date.from, filter.date.to) then transactions}
         {#each transactions.reverse() as transaction}
@@ -98,8 +104,11 @@
                         amount={transaction.amount}
                         type={transaction.type}
                         date={transaction.date}
+                        method={transaction.method}
                         description={transaction.description}
                         categoryId={transaction.category_id}
+
+                        bind:refresh
                     />
                 </div>
             </div>
