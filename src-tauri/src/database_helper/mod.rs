@@ -7,7 +7,7 @@ pub fn get_migrations() -> Vec<Migration>
             version: 1,
             description: "create_users_table",
             sql: "CREATE TABLE users (
-                id INTEGER PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 role TEXT,
                 username TEXT,
                 password TEXT,
@@ -20,7 +20,7 @@ pub fn get_migrations() -> Vec<Migration>
             version: 2,
             description: "create_categories_table",
             sql: "CREATE TABLE categories (
-                id INTEGER PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 type TEXT,
                 name TEXT
             );",
@@ -30,7 +30,7 @@ pub fn get_migrations() -> Vec<Migration>
             version: 3,
             description: "create_transactions_table",
             sql: "CREATE TABLE transactions (
-                id INTEGER PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER,
                 category_id INTEGER,
                 description TEXT,
